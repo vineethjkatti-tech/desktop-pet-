@@ -92,7 +92,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c3rhj"]
-size = Vector2(34, 30)
+size = Vector2(58.613068, 49.20603)
 
 [node name="Node2D" type="Node2D" unique_id=324056995]
 script = ExtResource("1_1t7xr")
@@ -103,8 +103,10 @@ scale = Vector2(4.1458335, 4.1458335)
 sprite_frames = SubResource("SpriteFrames_ijlsb")
 animation = &"walk-right"
 
-[node name="Area2D" type="Area2D" parent="AnimatedSprite2D" unique_id=2066294120]
+[node name="Area2D" type="Area2D" parent="." unique_id=2066294120]
+position = Vector2(75.5, 75.5)
+scale = Vector2(4.1458335, 4.1458335)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Area2D" unique_id=591421314]
-position = Vector2(-0.3618095, -0.8442216)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=591421314]
+position = Vector2(1.6884422, 1.5678387)
 shape = SubResource("RectangleShape2D_c3rhj")

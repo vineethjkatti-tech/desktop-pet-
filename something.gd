@@ -4,13 +4,14 @@ var speed = 300
 var direction = Vector2(1,0)
 var screen_size = Vector2()
 var window_size = Vector2(200,200)
+
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var area = $Area2D
+
 var is_dragging = false
 var drag_offset = Vector2()
 var idle_timer = 0.0
 var is_idling = false
-
 
 func _on_area_input(viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -18,36 +19,33 @@ func _on_area_input(viewport, event, _shape_idx):
 			is_dragging = true
 			var mouse_pos = Vector2(DisplayServer.mouse_get_position())
 			var win_pos = Vector2(DisplayServer.window_get_position())
+			# Calculate where the mouse is relative to the top-left of the window
 			drag_offset = mouse_pos - win_pos
 		else:
 			is_dragging = false
 
-
-
 func maybe_idle():
 	if randf() < 0.03:
 		is_idling = true
-		idle_timer - randf_range(1.0, 3.0)
-		var r = randi() % 3  
+		# FIX: Changed '-' to '=' so the timer actually gets assigned a value
+		idle_timer = randf_range(1.0, 3.0) 
+		var r = randi() % 3
 		if r == 0:
 			animated_sprite.play("idle")
 			speed = 0
-		
-		
-func _ready():
-		screen_size = Vector2(DisplayServer.screen_get_size())
-		animated_sprite.play("walk-right")
-		area.input_event.connect(_on_area_input)
-		
-		
-		
 
+func _ready():
+	screen_size = Vector2(DisplayServer.screen_get_size())
+	animated_sprite.play("walk-right")
+	area.input_event.connect(_on_area_input)
 
 func _physics_process(delta: float) -> void:
 	if is_dragging:
+		# FIX: Get the current global screen mouse position
 		var mouse_pos = Vector2(DisplayServer.mouse_get_position())
-		var new_win_pos = Vector2(DisplayServer.window_get_position())
-		DisplayServer.window_set_position(Vector2i(new_win_pos))
+		# FIX: Subtract the initial offset so the window follows the mouse properly
+		var target_win_pos = mouse_pos - drag_offset
+		DisplayServer.window_set_position(Vector2i(target_win_pos))
 		return
 		
 	if is_idling:
@@ -57,18 +55,20 @@ func _physics_process(delta: float) -> void:
 			speed = 300
 			animated_sprite.play("walk-right")
 		return
-		
+
 	var window_position = Vector2(DisplayServer.window_get_position())
 	window_position += direction * speed * delta
-	print(window_position)
+	
 	window_position.x = clamp(window_position.x, 0, screen_size.x - window_size.x)
 	window_position.y = clamp(window_position.y, 0, screen_size.y - window_size.y)
+	
 	DisplayServer.window_set_position(Vector2i(window_position))
 	
 	if window_position.x <= 0 or window_position.x >= screen_size.x - window_size.x:
 		direction.x *= -1
 		animated_sprite.flip_h = !animated_sprite.flip_h
 		maybe_idle()
+		
 	if window_position.y <= 0 or window_position.y >= screen_size.y - window_size.y :
 		direction.y *= -1
 		maybe_idle()
