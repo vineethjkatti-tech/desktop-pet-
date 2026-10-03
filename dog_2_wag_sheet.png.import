@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ddwuvjxje1tqg"
-path="res://.godot/imported/Crow.png-4af413557bdc54dfa04cb659cfb5c4b5.ctex"
+uid="uid://cw3auwboqty7e"
+path="res://.godot/imported/dog_2_wag_sheet.png-73463395d7874b877298274e9660597d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Crow.png"
-dest_files=["res://.godot/imported/Crow.png-4af413557bdc54dfa04cb659cfb5c4b5.ctex"]
+source_file="res://dog_2_wag_sheet.png"
+dest_files=["res://.godot/imported/dog_2_wag_sheet.png-73463395d7874b877298274e9660597d.ctex"]
 
 [params]
 
