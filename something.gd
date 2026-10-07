@@ -1,5 +1,7 @@
 extends Node2D
 
+const WALK_SPEED = 300.0
+
 var speed = 300
 var direction = Vector2(1,0)
 var screen_size = Vector2()
@@ -28,14 +30,15 @@ func _on_area_input(viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 			is_dragging = false
 
 func maybe_idle() -> void:
+	if is_idling or is_typing:
+			return
+			
 	if randf() < 0.03:
 		is_idling = true
-		# FIX: Changed '-' to '=' so the timer actually gets assigned a value
-		idle_timer = randf_range(1.0, 3.0) 
-		var r = randi() % 3
-		if r == 0:
-			animated_sprite.play("Idle")
-			speed = 0
+		idle_timer = randf_range(1.0, 3.0)
+		animated_sprite.play("Idle")
+		speed = 0
+		
 
 func _ready():
 	DisplayServer.window_move_to_foreground()
@@ -78,10 +81,12 @@ func _on_typing_stopped() -> void:
 				
 func _physics_process(delta: float) -> void:
 	if is_dragging:
-		# FIX: Get the current global screen mouse position
 		var mouse_pos = Vector2(DisplayServer.mouse_get_position())
-		# FIX: Subtract the initial offset so the window follows the mouse properly
 		var target_win_pos = mouse_pos - drag_offset
+		
+		target_win_pos.x = clamp(target_win_pos.x, 0, screen_size.x - window_size.x)
+		target_win_pos.y = clamp(target_win_pos.y, 0, screen_size.y - window_size.y)
+		
 		DisplayServer.window_set_position(Vector2i(target_win_pos))
 		return
 		
@@ -92,26 +97,40 @@ func _physics_process(delta: float) -> void:
 		idle_timer -= delta
 		if idle_timer <= 0:
 			is_idling = false
-			speed = 300
+			speed = WALK_SPEED
 			animated_sprite.play("Walk")
 		return
 		
 	var window_position = Vector2(DisplayServer.window_get_position())
 	window_position += direction * speed * delta
 	
-	window_position.x = clamp(window_position.x, 0, screen_size.x - window_size.x)
-	window_position.y = clamp(window_position.y, 0, screen_size.y - window_size.y)
+	var max_x = screen_size.x - window_size.x
+	var max_y = screen_size.y - window_size.y
 	
-	DisplayServer.window_set_position(Vector2i(window_position))
+	if window_position.x <= 0:
+		window_position.x = 0
+		direction.x = abs(direction.x)
+		animated_sprite.flip_h = false
+		maybe_idle()
+	elif window_position.x >= max_x:
+		window_position.x = max_x
+		direction.x = -abs(direction.x)
+		animated_sprite.flip_h = true
+		maybe_idle()
 	
-	if window_position.x <= 0 or window_position.x >= screen_size.x - window_size.x:
-		direction.x *= -1
-		animated_sprite.flip_h = !animated_sprite.flip_h
+	if window_position.y <=0:
+		window_position.y = 0
+		direction.y = abs(direction.y)
+		animated_sprite.flip_h = false
+		maybe_idle()
+	elif window_position.y >= max_y:
+		window_position.y = max_y
+		direction.y = -abs(direction.y)
+		animated_sprite.flip_h = true
 		maybe_idle()
 		
-	if window_position.y <= 0 or window_position.y >= screen_size.y - window_size.y :
-		direction.y *= -1
-		maybe_idle()
+	DisplayServer.window_set_position(Vector2i(window_position))
+	
 		
 
 				
