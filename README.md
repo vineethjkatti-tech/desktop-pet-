@@ -4,9 +4,9 @@
 
 ## Overview
 
-Besides being an insanely cool and good-looking, **Typo** is a desktop companion which ponders around on your screen, takes rests sometimes and also is veryyyyy excited to see you type. It **wags its tail around** at the sight of you typing and starts **panting** like crazyy!!
+Besides being an insanely cool and good-looking, **Typo** is a desktop companion which **ponders** around on your screen, which you can **drag** around, takes **rests** sometimes and also is **veryyyyy excited to see you type**. It **wags its tail around** at the sight of you typing and starts **panting** like crazyy!!
 
-You can install it from [itch.io!!](https://vineethjkatti-tech.itch.io/typo)
+Just install the .exe file from [itch.io](https://vineethjkatti-tech.itch.io/typo) and click on it to run!!
 
 **It's tail wag function is only accessible on windows right now, sorry!!**
 
