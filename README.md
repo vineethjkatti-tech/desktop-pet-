@@ -8,6 +8,8 @@ Besides being an insanely cool and good-looking, **Typo** is a desktop companion
 
 You can install it from [itch.io!!](https://vineethjkatti-tech.itch.io/typo)
 
+**It's tail wag function is only accessible on windows right now, sorry!!**
+
 
 
 
