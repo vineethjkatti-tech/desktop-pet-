@@ -8,6 +8,8 @@ Besides being an insanely cool and good-looking, **Typo** is a desktop companion
 
 Just install the .exe file from [itch.io](https://vineethjkatti-tech.itch.io/typo) and click on it to run!!
 
+ship message on slack: https://hackclub.slack.com/archives/C0C51NCK1DG/p1791395576746099
+
 **It's tail wag function is only accessible on windows right now, sorry!!**
 
 
