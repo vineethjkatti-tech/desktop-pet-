@@ -10,6 +10,9 @@ Just install the .exe file from [itch.io](https://vineethjkatti-tech.itch.io/typ
 
 ship message on slack: https://hackclub.slack.com/archives/C0C51NCK1DG/p1791395576746099
 
+Here is a **video** of it working:
+https://github.com/user-attachments/assets/b0bf0e55-3425-46f8-8e1f-91ee5e0a864b
+
 **It's tail wag function is only accessible on windows right now, sorry!!**
 
 
