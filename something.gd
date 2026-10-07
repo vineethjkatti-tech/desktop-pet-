@@ -14,8 +14,9 @@ var drag_offset = Vector2()
 var idle_timer = 0.0
 var is_idling = false
 var is_typing = false
+var typing_keys: Array[Key] = []
 
-func _on_area_input(viewport, event, _shape_idx):
+func _on_area_input(viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			is_dragging = true
@@ -26,7 +27,7 @@ func _on_area_input(viewport, event, _shape_idx):
 		else:
 			is_dragging = false
 
-func maybe_idle():
+func maybe_idle() -> void:
 	if randf() < 0.03:
 		is_idling = true
 		# FIX: Changed '-' to '=' so the timer actually gets assigned a value
@@ -37,25 +38,44 @@ func maybe_idle():
 			speed = 0
 
 func _ready():
+	DisplayServer.window_move_to_foreground()
 	screen_size = Vector2(DisplayServer.screen_get_size())
 	animated_sprite.play("Walk")
 	area.input_event.connect(_on_area_input)
 	typing_timer.timeout.connect(_on_typing_stopped)
 	
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.is_pressed() and not event.is_echo():
-		print("Key detected: ", OS.get_keycode_string(event.key_label))
-		is_typing = true
-		if animated_sprite.animation != ("Typing"):
-			animated_sprite.play("Typing")
-			typing_timer.start()
-				
+	for k in range(KEY_A, KEY_Z + 1):
+		typing_keys.append(k as Key)
+	for k in range(KEY_0, KEY_9 + 1):
+		typing_keys.append(k as Key)
+	typing_keys.append(KEY_SPACE)
+	typing_keys.append(KEY_BACKSPACE)
+	typing_keys.append(KEY_ENTER)
 	
+	
+func _check_global_typing() -> void:
+	for key in typing_keys:
+		if GlobalInput.is_global_key_just_pressed(key):
+			is_typing = true
+			if animated_sprite.animation != "Typing":
+				animated_sprite.play("Typing")
+			typing_timer.start()
+			break
+			
+
+
+func _process(_delta: float) -> void:
+	_check_global_typing()
+
+			
 func _on_typing_stopped() -> void:
 	is_typing = false
 	animated_sprite.play("Walk")
+	
 
 			
+					
+				
 func _physics_process(delta: float) -> void:
 	if is_dragging:
 		# FIX: Get the current global screen mouse position
@@ -68,8 +88,6 @@ func _physics_process(delta: float) -> void:
 	if is_typing:
 		return
 		
-		
-		
 	if is_idling:
 		idle_timer -= delta
 		if idle_timer <= 0:
@@ -78,9 +96,6 @@ func _physics_process(delta: float) -> void:
 			animated_sprite.play("Walk")
 		return
 		
-		
-		
-
 	var window_position = Vector2(DisplayServer.window_get_position())
 	window_position += direction * speed * delta
 	
@@ -98,28 +113,6 @@ func _physics_process(delta: float) -> void:
 		direction.y *= -1
 		maybe_idle()
 		
-		_check_windows_global_keys()
-		
-func _check_windows_globa_keys() -> void:
-	if not OS.has_feature("windows"):
-		return
-		
-	var keys_to_check = [0x20, 0x0D]
-	for k in range(0x41, 0x5B)
-	keys_to_check.append(k)
-	
-	
-	for vk in keys_to_check:
-		if Input.is_physical_key_pressed(vk) or win_key_down(vk):
-			if not is_typing:
-				is_typing = true
-				if animated_sprite.animation != "Typing"
-					animated_sprite.play("Typing")
-					
-				typing_timer.start()
-				break
-				
-func _win_key_down(virtual_key: int) -> bool:
-	return false
+
 				
 					

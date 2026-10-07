@@ -161,3 +161,4 @@ position = Vector2(101, 98)
 shape = SubResource("RectangleShape2D_hewpr")
 
 [node name="TypingTimer" type="Timer" parent="." unique_id=1051304988]
+wait_time = 0.45
