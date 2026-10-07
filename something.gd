@@ -10,6 +10,7 @@ var window_size = Vector2(200,200)
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var area = $Area2D
 @onready var typing_timer = $TypingTimer
+@onready var typing_audio = $TypingAudio
 
 var is_dragging = false
 var drag_offset = Vector2()
@@ -17,6 +18,7 @@ var idle_timer = 0.0
 var is_idling = false
 var is_typing = false
 var typing_keys: Array[Key] = []
+
 
 func _on_area_input(viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -62,6 +64,9 @@ func _check_global_typing() -> void:
 			is_typing = true
 			if animated_sprite.animation != "Typing":
 				animated_sprite.play("Typing")
+				
+			if not typing_audio.playing:
+				typing_audio.play()
 			typing_timer.start()
 			break
 			
@@ -73,7 +78,12 @@ func _process(_delta: float) -> void:
 			
 func _on_typing_stopped() -> void:
 	is_typing = false
-	animated_sprite.play("Walk")
+	
+	typing_audio.stop()
+	
+	if not is_idling:
+		speed = WALK_SPEED
+		animated_sprite.play("Walk")
 	
 
 			
